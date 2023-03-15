@@ -1,17 +1,27 @@
 {
-    "extends": "./.svelte-kit/tsconfig.json",
-    "compilerOptions": {
-        "allowJs": true,
-        "checkJs": true,
-        "esModuleInterop": true,
-        "forceConsistentCasingInFileNames": true,
-        "resolveJsonModule": true,
-        "skipLibCheck": true,
-        "sourceMap": true,
-        "strict": true,
-    }
-    // Path aliases are handled by https://kit.svelte.dev/docs/configuration#alias
-    //
-    // If you want to overwrite includes/excludes, make sure to copy over the relevant includes/excludes
-    // from the referenced tsconfig.json - TypeScript does not merge them in
+	"include": ["src/**/*", "webpack.config.ts"],
+	"exclude": ["node_modules/*", "__sapper__/*", "public/*"],
+	"compilerOptions": {
+		"moduleResolution": "node",
+		"target": "es2017",
+		"module": "es2020",
+		"importsNotUsedAsValues": "remove",
+		"isolatedModules": true,
+		"esModuleInterop": true,
+		"sourceMap": true,
+		"strict": false,
+		"baseUrl": ".",
+		"paths": {
+            "@/*": ["src/*"]
+		},
+		"types": [
+			"svelte",
+			"svelte/store",
+			"svelte/motion",
+			"svelte/transition",
+			"svelte/animate",
+			"svelte/easing",
+			"vite/client"
+		]
+	}
 }

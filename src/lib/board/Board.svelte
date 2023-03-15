@@ -1,6 +1,6 @@
 <script lang="ts">
     import Post from "./Post.svelte";
-    import type { Page, Post as PostType } from "../types/atuyka";
+    import type { Page, Post as PostType } from "@/lib/api.js";
 
     export let data: Page<PostType>;
 </script>

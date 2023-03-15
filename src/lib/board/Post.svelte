@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { Post as PostType } from "../types/atuyka";
+    import type { Post as PostType } from "@/lib/api.js";
 
     export let data: PostType;
 </script>
@@ -32,7 +32,7 @@
                     {/if}
                 </picture>
             {:else}
-                <div>{data.title}</div>
+                <div>{data.title || data.description}</div>
             {/if}
         </a>
     </div>

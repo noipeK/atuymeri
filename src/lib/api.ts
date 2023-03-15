@@ -1,6 +1,3 @@
-// atuyka openapi models
-// (I should probably use a generator for this)
-
 export interface Attachment {
     service: string;
     thumbnail?: AttachmentURL;
@@ -81,4 +78,44 @@ export interface User {
     tags?: Tag[];
     language?: string;
     following?: boolean;
+}
+
+const api_origin = import.meta.env.DEV ? "http://localhost:8000" : window.location.origin;
+
+async function request(path: string, service: string, token?: string, extras?: Record<string, string>) {
+    console.log(import.meta.env.DEV, api_origin);
+    const url = `${api_origin}/api/${path}?` + new URLSearchParams({"service": service, ...extras});
+    const response = await fetch(url, {
+        headers: token ? { Authorization: token } : undefined,
+    });
+
+    if (!response.headers.get("Content-Type")?.startsWith("application/json")) {
+        throw new Error(`Invalid content type: ${response.headers.get("Content-Type")}`);
+    }
+
+    const data = await response.json();
+
+    if ( data.error ) {
+        // TODO: Custom errors
+        throw new Error(await response.text());
+    }
+
+    return data;
+}
+
+
+export async function get_user(user: string, service: string, token?: string, extras?: Record<string, string>) {
+    const data = await request(`users/${user}`, service, token, extras);
+    return data as User;
+}
+
+export async function get_user_posts(user: string, service: string, token?: string, extras?: Record<string, string>) {
+    const data = await request(`users/${user}/posts`, service, token, extras);
+    return data as Page<Post>;
+}
+
+export async function get_post(user: string | undefined, post: string, service: string, token?: string, extras?: Record<string, string>) {
+    const path = user ? `users/${user}/posts/${post}` : `posts/${post}`;
+    const data = await request(path, service, token, extras);
+    return data as Post;
 }
